@@ -21,72 +21,72 @@ namespace WindBot.Game.AI
             _game = game;
             _duelstart = new[]
                 {
-                    "Good luck, have fun."
+                    "Bonne chance, amusons nous."
                 };
             _newturn = new[]
                 {
-                    "It's my turn, draw.",
-                    "My turn, draw.",
-                    "I draw a card."
+                    "C'est mon tour, je pioche !.",
+                    "Mon tour, et je pioche...",
+                    "Je pioche !"
                 };
             _endturn = new[]
                 {
-                    "I end my turn.",
-                    "My turn is over.",
-                    "Your turn."
+                    "Je termine mon tour.",
+                    "Mon tour est terminé.",
+                    "A toi."
                 };
             _directattack = new[]
                 {
-                    "{0}, direct attack!",
-                    "{0}, attack him directly!",
-                    "{0}, he's defenseless, attack!",
-                    "{0}, attack his life points!",
-                    "{0}, attack his life points directly!",
-                    "{0}, attack him through a direct attack!",
-                    "{0}, attack him using a direct attack!",
-                    "{0}, unleash your power through a direct attack!",
-                    "My {0} is going to smash your life points!",
-                    "Show your power to my opponent, {0}!",
-                    "You can't stop me. {0}, attack!"
+                    "{0}, attaque direct!",
+                    "{0}, attaque le directement.",
+                    "{0}, il est sans défense, attaque!",
+                    "{0}, attaque ses points de vie.",
+                    "{0}, attaque ses points de vie directement.!",
+                    "{0}, attaque le grace à une attaque direct!",
+                    "{0}, utilise toute ta puissance contre ses points de vies!",
+                    "{0}, il est faible attaque!",
+                    "Mon {0} va donner une claque à tes points de vies!",
+                    "Montre lui ton pouvoir, attaque {0}!",
+                    "Tu ne peux m'arrêter. {0}, attaque."
                 };
             _attack = new[]
                 {
-                    "{0}, attack this {1}!",
-                    "{0}, destroy this {1}!",
-                    "{0}, charge the {1}!",
-                    "{0}, strike that {1}!",
-                    "{0}, unleash your power on this {1}!"
+                    "{0}, attaque ce {1}!",
+                    "{0}, détruis ce {1}!",
+                    "{0}, c'est {1} qu'il faut attaquer!",
+                    "{0}, élimine ce {1}!",
+                    "{0}, montre ton pouvoir à {1}!"
                 };
             _activate = new[]
                 {
-                    "I'm activating {0}.",
-                    "I'm using the effect of {0}.",
-                    "I use the power of {0}."
+                    "Je vais activer {0}.",
+                    "Je vais utiliser l'effet de {0}.",
+                    "J'utilise le pouvoir de {0}."
                 };
             _summon = new[]
                 {
-                    "I'm summoning {0}.",
-                    "Come on, {0}!",
-                    "Appear, {0}!",
-                    "I summon the powerful {0}.",
-                    "I call {0} to the battle!",
-                    "I'm calling {0}.",
-                    "Let's summon {0}."
+                    "J'invoque {0}.",
+                    "Viens, {0}!",
+                    "Apparait, {0}!",
+                    "J'invoque le puissant {0}.",
+                    "J'appelle {0} pour ce battre!",
+                    "C'est à toi, {0}.",
+                    "C'est parti pour l'invoquation de {0}."
                 };
             _setmonster = new[]
                 {
-                    "I'm setting a monster.",
-                    "I set a face-down monster.",
-                    "I place a hidden monster."
+                    "Je prépare ma défense.",
+                    "Je pose un monstre.",
+                    "Je pose un monstre face cacher."
                 };
             _chaining = new[]
                 {
-                    "Look at that! I'm activating {0}.",
-                    "I use the power of {0}.",
-                    "Get ready! I use {0}.",
-                    "I don't think so. {0}, activation!",
-                    "Looks like you forgot my {0}.",
-                    "Did you consider the fact I have {0}?"
+                    "Regarde ça ! J'active {0}.",
+                    "J'utilise le pouvoir de {0}.",
+                    "Prépare toi! J'active {0}.",
+                    "Je ne crois pas. {0}, active toi!",
+                    "Il me semble que tu as oublier ma carte, {0}.",
+                    "As-tu pris en compte le fait que j'ai en main {0}?"
                 };
         }
 
