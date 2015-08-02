@@ -129,7 +129,7 @@ namespace WindBot.Game
         {
             int type = packet.ReadByte();
             int pos = type & 0xF;
-            if (pos != 0 && pos != 1)
+            if (pos != 0 && pos != 1 && pos != 2 && pos != 3)
             {
                 Connection.Close();
                 return;
@@ -235,7 +235,7 @@ namespace WindBot.Game
             deck = packet.ReadInt16();
             extra = packet.ReadInt16();
             _duel.Fields[GetLocalPlayer(1)].Init(deck, extra);
-            if (_room.Names[0] != Game.Username && _room.Names[1] != Game.Username)
+            if (_room.Names[0] != Game.Username && _room.Names[1] != Game.Username && _room.Names[2] != Game.Username && _room.Names[3] != Game.Username)
             {
                 Connection.Close();
                 return;

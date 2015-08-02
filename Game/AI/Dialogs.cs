@@ -21,7 +21,8 @@ namespace WindBot.Game.AI
             _game = game;
             _duelstart = new[]
                 {
-                    "Bonne chance, amusons nous."
+                    "Bonne chance, amusons nous. Je suis en version alpha, et mes decks aussi. Merci pour votre compréhension",
+
                 };
             _newturn = new[]
                 {
@@ -93,6 +94,8 @@ namespace WindBot.Game.AI
         public void SendDuelStart()
         {
             InternalSendMessage(_duelstart);
+            InternalSendMessage(new[] { "Signaler les bugs à Tic-Tac-Toc ou TicTacTocProd@gmail.com" });
+            InternalSendMessage(new[]{"Je suis en version alpha (0.0.24), mes decks aussi. Soyez compréhensifs..."});
         }
 
         public void SendNewTurn()

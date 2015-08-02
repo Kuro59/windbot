@@ -32,7 +32,8 @@ namespace WindBot.Game.AI.Decks
             DimensionalPrison = 70342110
         }
 
-        public HorusExecutor(GameAI ai, Duel duel) : base(ai, duel)
+        public HorusExecutor(GameAI ai, Duel duel)
+            : base(ai, duel)
         {
             AddExecutor(ExecutorType.SpellSet, DefaultSpellSet);
 
@@ -61,8 +62,8 @@ namespace WindBot.Game.AI.Decks
             AddExecutor(ExecutorType.Repos, DefaultMonsterRepos);
 
             AddExecutor(ExecutorType.Activate, (int)CardId.HorusTheBlackFlameDragonLv8, HorusTheBlackFlameDragonLv8);
-            AddExecutor(ExecutorType.Activate, (int)CardId.MirrorForce, DefaultTrap);
-            AddExecutor(ExecutorType.Activate, (int)CardId.DimensionalPrison, DefaultTrap);
+            AddExecutor(ExecutorType.Activate, (int)CardId.MirrorForce, DefaultUniqueTrap);
+            AddExecutor(ExecutorType.Activate, (int)CardId.DimensionalPrison, DefaultUniqueTrap);
             AddExecutor(ExecutorType.Activate, (int)CardId.DragonsRebirth, DragonsRebirth);
         }
 

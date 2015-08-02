@@ -11,6 +11,7 @@ namespace WindBot.Game.Network
     public class GameConnection
     {
         public bool IsConnected { get; private set; }
+        public bool HasJoined { get; private set; }
 
         private TcpClient _client;
         private BinaryReader _reader;
@@ -26,8 +27,16 @@ namespace WindBot.Game.Network
             _sendQueue = new Queue<GameClientPacket>();
             _receiveQueue = new Queue<GameServerPacket>();
             _lastAction = DateTime.Now;
-            _client = new TcpClient(address.ToString(), port);
-            IsConnected = true;
+            while (!HasJoined)
+            {
+                try
+                {
+                    _client = new TcpClient(address.ToString(), port);
+                    HasJoined = true;
+                    IsConnected = true;
+                }
+                catch { }
+            }
             _reader = new BinaryReader(_client.GetStream());
             _thread = new Thread(NetworkTick);
             _thread.Start();

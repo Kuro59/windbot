@@ -98,6 +98,34 @@ namespace WindBot.Game.AI
             return AI.Utils.IsEnnemyBetter(false, false);
         }
 
+        protected bool DefaultSwordsOfRevealingLight()
+        {
+            foreach (ClientCard handCard in Duel.Fields[1].GetMonsters())
+            {
+                if (handCard.IsFacedown())
+                    return true;
+            }
+            return AI.Utils.IsEnnemyBetter(true, false);
+        }
+
+        protected bool DefaultCallOfTheHaunted()
+        {
+            if (!AI.Utils.IsEnnemyBetter(true, true))
+                return false;
+            ClientCard selected = null;
+            int BestAtk = 0;
+            foreach (ClientCard card in Duel.Fields[0].Graveyard)
+            {
+                if (card.Attack > BestAtk)
+                {
+                    BestAtk = card.Attack;
+                    selected = card;
+                }
+            }
+            AI.SelectCard(selected);
+            return true;
+        }
+
         protected bool DefaultSpellSet()
         {
             return Card.IsTrap() && Duel.Fields[0].GetSpellCountWithoutField() < 4;

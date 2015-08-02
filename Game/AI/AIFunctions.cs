@@ -84,5 +84,10 @@ namespace WindBot.Game.AI
             }
             return !nomonster;
         }
+
+        public int GetStringId(int id, int option)
+        {
+            return id * 16 + option;
+        }
     }
 }
