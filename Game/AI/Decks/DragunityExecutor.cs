@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-using WindBot.Game.Enums;
 
-namespace WindBot.Game.AI.Decks
+﻿using OCGWrapper.Enums;
+using System.Collections.Generic;
+using WindBot.Game;
+using WindBot.Game.AI;
+
+namespace DevBot.Game.AI.Decks
 {
     [Deck("Dragunity", "AI_Dragunity")]
-
     public class DragunityExecutor : DefaultExecutor
     {
         public enum CardId
@@ -16,12 +18,14 @@ namespace WindBot.Game.AI.Decks
             DragunityPhalanx = 59755122,
             AssaultTeleport = 29863101,
             CardsOfConsonance = 39701395,
+            UpstartGoblin = 70368879,
             DragonsMirror = 71490127,
             Terraforming = 73628505,
             FoolishBurial = 81439173,
             MonsterReborn = 83764718,
             MysticalSpaceTyphoon = 5318639,
             FireFormationTenki = 57103969,
+            DragunitySpearOfDestiny = 60004971,
             DragonRavine = 62265044,
             MirrorForce = 44095762,
             StarlightRoad = 58120309,
@@ -41,8 +45,9 @@ namespace WindBot.Game.AI.Decks
             AddExecutor(ExecutorType.SpellSet, DefaultSpellSet);
 
             // Execute spells
-            AddExecutor(ExecutorType.Activate, (int)CardId.MysticalSpaceTyphoon, MysticalSpaceTyphoon);
+            AddExecutor(ExecutorType.Activate, (int)CardId.MysticalSpaceTyphoon, DefaultMysticalSpaceTyphoon);
             AddExecutor(ExecutorType.Activate, (int)CardId.AssaultTeleport);
+            AddExecutor(ExecutorType.Activate, (int)CardId.UpstartGoblin);
             AddExecutor(ExecutorType.Activate, (int)CardId.DragonRavine, DragonRavineField);
             AddExecutor(ExecutorType.Activate, (int)CardId.Terraforming, Terraforming);
             AddExecutor(ExecutorType.Activate, (int)CardId.FoolishBurial, FoolishBurial);
@@ -69,6 +74,7 @@ namespace WindBot.Game.AI.Decks
             AddExecutor(ExecutorType.Activate, (int)CardId.CardsOfConsonance);
             AddExecutor(ExecutorType.Activate, (int)CardId.DragonRavine, DragonRavineEffect);
             AddExecutor(ExecutorType.Activate, (int)CardId.FireFormationTenki, FireFormationTenki);
+            AddExecutor(ExecutorType.Activate, (int)CardId.DragunitySpearOfDestiny);
 
             // Summon
             AddExecutor(ExecutorType.Summon, (int)CardId.DragunityDux, DragunityDux);
@@ -135,7 +141,10 @@ namespace WindBot.Game.AI.Decks
             AI.SelectCard(selected);
             return true;
         }
-
+            AddExecutor(ExecutorType.Activate, (int)CardId.MirrorForce, DefaultTrap);
+            AddExecutor(ExecutorType.Activate, (int)CardId.DimensionalPrison, DefaultTrap);
+            AddExecutor(ExecutorType.Activate, (int)CardId.AssaultModeActivate);
+        }
         private bool DragonRavineField()
         {
             if (Card.Location == CardLocation.Hand)
@@ -163,7 +172,7 @@ namespace WindBot.Game.AI.Decks
                 tributeId = (int)CardId.AssaultTeleport;
             else if (field.HasInHand((int)CardId.AssaultBeast))
                 tributeId = (int)CardId.AssaultBeast;
-            else if (field.HasInHand((int)CardId.DragunityArmaMysletainn))
+            else if (field.HasInHand((int) CardId.DragunityArmaMysletainn))
                 tributeId = (int)CardId.DragunityArmaMysletainn;
             else
             {
@@ -177,6 +186,11 @@ namespace WindBot.Game.AI.Decks
                     tributeId = (int)CardId.DragunityDux;
             }
             if (tributeId == -1 && field.HasInHand((int)CardId.StardustDragonAssaultMode))
+                tributeId = (int)CardId.StardustDragonAssaultMode;
+            if (tributeId == -1 && field.HasInHand((int)CardId.DragunitySpearOfDestiny))
+                tributeId = (int)CardId.StardustDragonAssaultMode;
+            if (tributeId == -1 && field.HasInHand((int)CardId.DragonsMirror)
+                && Duel.Fields[0].GetMonsterCount() == 0)
                 tributeId = (int)CardId.StardustDragonAssaultMode;
 
             if (tributeId == -1)
@@ -229,7 +243,7 @@ namespace WindBot.Game.AI.Decks
             else
                 option = 1;
 
-            if (ActivateDescription != AI.Utils.GetStringId((int)CardId.DragonRavine,option))
+            if (ActivateDescription != (int)CardId.DragonRavine*16 + option)
                 return false;
 
             AI.SelectCard(tributeId);
@@ -298,8 +312,8 @@ namespace WindBot.Game.AI.Decks
                 ClientCard card = cards[i];
                 if (card.Attack < 2000)
                     break;
-                if (card.Id == (int)CardId.StardustDragonAssaultMode ||
-                    card.Id == (int)CardId.FiveHeadedDragon)
+                if (card.Id == (int) CardId.StardustDragonAssaultMode ||
+                    card.Id == (int) CardId.FiveHeadedDragon)
                     continue;
                 if (card.IsMonster())
                 {
@@ -334,12 +348,12 @@ namespace WindBot.Game.AI.Decks
             int phalanxCount = 0;
             foreach (ClientCard card in Duel.Fields[0].Graveyard)
             {
-                if (card.Id == (int)CardId.DragunityPhalanx)
+                if (card.Id == (int) CardId.DragunityPhalanx)
                 {
                     phalanxCount++;
                     break;
                 }
-                if (card.Race == (int)CardRace.Dragon)
+                if (card.Race == (int) CardRace.Dragon)
                     tributes.Add(card);
                 if (tributes.Count == 5)
                     break;
@@ -351,7 +365,7 @@ namespace WindBot.Game.AI.Decks
             {
                 foreach (ClientCard card in Duel.Fields[0].Graveyard)
                 {
-                    if (card.Id == (int)CardId.DragunityPhalanx)
+                    if (card.Id == (int) CardId.DragunityPhalanx)
                     {
                         phalanxCount--;
                         tributes.Add(card);
@@ -452,7 +466,8 @@ namespace WindBot.Game.AI.Decks
         {
             if ((Duel.Fields[0].HasInMonstersZone((int)CardId.AssaultBeast)
                 && Duel.Fields[0].HasInGraveyard((int)CardId.DragunityPhalanx))
-                || Duel.Fields[0].HasInMonstersZone((int)CardId.DragunityPhalanx))
+                || Duel.Fields[0].HasInMonstersZone((int)CardId.DragunityPhalanx)
+                || Duel.Fields[0].HasInHand((int)CardId.DragunitySpearOfDestiny))
                 return true;
             return false;
         }
@@ -460,7 +475,8 @@ namespace WindBot.Game.AI.Decks
         private bool DragunityDux()
         {
             return Duel.Fields[0].HasInGraveyard((int)CardId.DragunityPhalanx) ||
-                (Duel.Fields[0].GetMonsterCount() == 0 && Duel.Fields[0].HasInHand((int)CardId.DragunityArmaMysletainn));
+                (Duel.Fields[0].GetMonsterCount() == 0 && Duel.Fields[0].HasInHand((int)CardId.DragunityArmaMysletainn) ||
+                Duel.Fields[0].HasInHand((int)CardId.DragunitySpearOfDestiny));
         }
 
         private bool DragunityPhalanxSet()
@@ -485,12 +501,7 @@ namespace WindBot.Game.AI.Decks
         private ClientCard GetProblematicCard()
         {
             ClientCard card = Duel.Fields[1].MonsterZone.GetInvincibleMonster();
-            if (card != null)
-                return card;
-            card = Duel.Fields[1].SpellZone.GetNegateAttackSpell();
-            if (card != null)
-                return card;
-            return null;
+            return card ?? Duel.Fields[1].SpellZone.GetNegateAttackSpell();
         }
     }
 }

@@ -35,6 +35,8 @@ namespace WindBot
         private static System.Timers.Timer timer;
 
         private static void OnTimedEvent(object source, ElapsedEventArgs e)
+        
+        internal static void Main()
         {
             string message = string.Empty;
             Random randNum = new Random();
@@ -120,6 +122,7 @@ namespace WindBot
             }
         }
 
+<<<<<<< HEAD
         private static void Run(string info)
         {
             int DeckNum = Rand.Next(13);
@@ -133,6 +136,18 @@ namespace WindBot
             Console.WriteLine("Connexion réussi au port : " + port + " Deck -> " + Deck[DeckNum]);
             Game.Add(clientA);
         }
+=======
+        public static void Init(string databasePath)
+        {
+            Rand = new Random();
+            DecksManager.Init();
+            InitCardsManager(databasePath);
+        }
+        
+        private static void Run()
+        {
+            Init("cards.cdb");
+>>>>>>> 2241def41d8259ce023e94cede8593c51925cc93
 
         private static void Run(string pseudo, string deck, string info)
         {
@@ -338,6 +353,7 @@ namespace WindBot
             }
         }
 
+<<<<<<< HEAD
         public static string GetKEY()
         {
             if (RegEditor.Read("Software\\BCA\\", "KEY") != null)
@@ -356,6 +372,13 @@ namespace WindBot
                   .ComputeHash(Encoding.UTF8.GetBytes(value))
                   .Select(item => item.ToString("x2")));
             }
+=======
+        private static void InitCardsManager(string databasePath)
+        {
+            string currentPath = Path.GetFullPath(".");
+            string absolutePath = Path.Combine(currentPath, databasePath);
+            NamedCardsManager.Init(absolutePath);
+>>>>>>> 2241def41d8259ce023e94cede8593c51925cc93
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using WindBot.Game.Enums;
+﻿using OCGWrapper.Enums;
+using System.Collections.Generic;
 using WindBot.Game;
 using WindBot.Game.AI;
 
@@ -110,7 +112,7 @@ namespace DevBot.Game.AI.Decks
 
         private bool Number39Utopia()
         {
-            if (!HasChainedTrap(0) && Duel.Player == 1 && Duel.Phase == Phase.Battle && Card.Overlays.Count > 1)
+            if (!HasChainedTrap(0) && Duel.Player == 1 && Duel.Phase == DuelPhase.BattleStart && Card.Overlays.Count > 1)
                 return true;
             return false;
         }
@@ -200,7 +202,7 @@ namespace DevBot.Game.AI.Decks
 
         private bool SolarWindJammer()
         {
-            AI.SelectPosition(CardPosition.FaceUpDefense);
+            AI.SelectPosition(CardPosition.FaceUpDefence);
             return true;
         }
 

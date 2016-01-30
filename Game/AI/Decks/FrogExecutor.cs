@@ -1,6 +1,9 @@
-﻿using WindBot.Game.Enums;
+﻿using OCGWrapper.Enums;
 using System.Collections.Generic;
-namespace WindBot.Game.AI.Decks
+using WindBot.Game;
+using WindBot.Game.AI;
+
+namespace DevBot.Game.AI.Decks
 {
     [Deck("Frog", "AI_Frog")]
     public class FrogExecutor : DefaultExecutor
@@ -18,6 +21,7 @@ namespace WindBot.Game.AI.Decks
             Tradetoad = 23408872,
             TreebornFrog = 12538374,
             DarkHole = 53129443,
+            Raigeki = 12580477,
             Terraforming = 73628505,
             PotOfDuality = 98645731,
             Solidarity = 86780027,
@@ -35,7 +39,8 @@ namespace WindBot.Game.AI.Decks
             AddExecutor(ExecutorType.Activate, (int)CardId.Solidarity, Solidarity);
             AddExecutor(ExecutorType.Activate, (int)CardId.Terraforming, Terraforming);
             AddExecutor(ExecutorType.Activate, (int)CardId.Wetlands, DefaultField);
-            AddExecutor(ExecutorType.Activate, (int)CardId.DarkHole, DarkHole);
+            AddExecutor(ExecutorType.Activate, (int)CardId.DarkHole, DefaultDarkHole);
+            AddExecutor(ExecutorType.Activate, (int)CardId.Raigeki, DefaultRaigeki);
             AddExecutor(ExecutorType.Activate, (int)CardId.PotOfDuality, PotOfDuality);
 
             AddExecutor(ExecutorType.SpSummon, (int)CardId.SwapFrog, SwapFrogSummon);
@@ -119,7 +124,7 @@ namespace WindBot.Game.AI.Decks
 
         private bool FlipFlopFrog()
         {
-            if (Card.IsDefense() || m_flipFlopFrogSummoned == Duel.Turn || Duel.Phase == Phase.Main2)
+            if (Card.IsDefense() || m_flipFlopFrogSummoned == Duel.Turn || Duel.Phase == DuelPhase.Main2)
             {
                 m_flipFlopFrogSummoned = -1;
                 List<ClientCard> monsters = Duel.Fields[1].GetMonsters();
@@ -137,7 +142,7 @@ namespace WindBot.Game.AI.Decks
             if (monsters.Count > 2)
             {
                 if (GetSpellBonus() == 0)
-                    AI.SelectPosition(CardPosition.FaceUpDefense);
+                    AI.SelectPosition(CardPosition.FaceUpDefence);
                 return true;
             }
             return false;
@@ -158,7 +163,6 @@ namespace WindBot.Game.AI.Decks
         private bool PotOfDuality()
         {
             List<int> cards = new List<int>();
-
             if (AI.Utils.IsEnnemyBetter(false, false))
             {
                 cards.Add((int)CardId.FlipFlopFrog);
