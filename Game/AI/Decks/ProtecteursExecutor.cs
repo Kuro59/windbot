@@ -119,7 +119,7 @@ namespace WindBot.Game.AI.Decks
             if (!Card.IsAttack())
                 return false;
             foreach (ClientCard card in Duel.Fields[1].MonsterZone)
-                if (card.IsDefense() && card.Defense > 1500 && card.Attack < 1500 || card.Attack > 1500 && card.Defense < 1500)
+                if (card != null && card.IsDefense() && card.Defense > 1500 && card.Attack < 1500 || card.Attack > 1500 && card.Defense < 1500)
                     return true;
             return false;
         }
@@ -139,16 +139,16 @@ namespace WindBot.Game.AI.Decks
         {
             int number = 0;
             foreach (ClientCard card in Duel.Fields[0].Hand)
-                if (card.Id == (int)CardId.Serviteur)
+                if (card != null && card.Id == (int)CardId.Serviteur)
                     number++;
             foreach (ClientCard card in Duel.Fields[0].Graveyard)
-                if (card.Id == (int)CardId.Serviteur)
+                if (card != null && card.Id == (int)CardId.Serviteur)
                     number++;
             foreach (ClientCard card in Duel.Fields[0].MonsterZone)
-                if (card.Id == (int)CardId.Serviteur)
+                if (card != null && card.Id == (int)CardId.Serviteur)
                     number++;
             foreach (ClientCard card in Duel.Fields[0].Banished)
-                if (card.Id == (int)CardId.Serviteur)
+                if (card != null && card.Id == (int)CardId.Serviteur)
                     number++;
 
             if (number < 3)

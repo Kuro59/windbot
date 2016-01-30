@@ -87,7 +87,7 @@ namespace WindBot.Game.AI.Decks
         private bool MysticalSpaceTyphoon()
         {
             foreach (ClientCard card in CurrentChain)
-                if (card.Id == (int)CardId.MysticalSpaceTyphoon)
+                if (card != null && card.Id == (int)CardId.MysticalSpaceTyphoon)
                     return false;
 
             return StampingDestruction();
@@ -156,7 +156,7 @@ namespace WindBot.Game.AI.Decks
         {
             List<ClientCard> monster = Duel.Fields[0].GetMonsters();
             foreach (ClientCard card in monster)
-                if (card.Id == (int)CardId.KrisLaFissure || card.Id == (int)CardId.Kalut || card.Id == (int)CardId.MisralLeTourbillon || card.Id == (int)CardId.Bora || card.Id == (int)CardId.Sirocco || card.Id == (int)CardId.Shura || card.Id == (int)CardId.Blizzard)
+                if (card != null && card.Id == (int)CardId.KrisLaFissure || card.Id == (int)CardId.Kalut || card.Id == (int)CardId.MisralLeTourbillon || card.Id == (int)CardId.Bora || card.Id == (int)CardId.Sirocco || card.Id == (int)CardId.Shura || card.Id == (int)CardId.Blizzard)
                     return true;
             return false;
         }
@@ -164,7 +164,7 @@ namespace WindBot.Game.AI.Decks
         private bool Kalut()
         {
             foreach (ClientCard card in Duel.Fields[0].Hand)
-                if (card.Id == (int)CardId.KrisLaFissure ||  card.Id == (int)CardId.MisralLeTourbillon || card.Id == (int)CardId.Bora || card.Id == (int)CardId.Sirocco || card.Id == (int)CardId.Shura || card.Id == (int)CardId.Blizzard)
+                if (card != null && card.Id == (int)CardId.KrisLaFissure || card.Id == (int)CardId.MisralLeTourbillon || card.Id == (int)CardId.Bora || card.Id == (int)CardId.Sirocco || card.Id == (int)CardId.Shura || card.Id == (int)CardId.Blizzard)
                     return false;
             return true;
         }
@@ -172,7 +172,7 @@ namespace WindBot.Game.AI.Decks
         private bool Blizzard()
         {
             foreach (ClientCard card in Duel.Fields[0].Graveyard)
-                if (card.Id == (int)CardId.Kalut || card.Id == (int)CardId.Bora || card.Id == (int)CardId.Shura || card.Id == (int)CardId.KrisLaFissure)
+                if (card != null && card.Id == (int)CardId.Kalut || card.Id == (int)CardId.Bora || card.Id == (int)CardId.Shura || card.Id == (int)CardId.KrisLaFissure)
                     return true;
             return false;
         }
@@ -183,7 +183,7 @@ namespace WindBot.Game.AI.Decks
 
             List<ClientCard> monster = Duel.Fields[0].GetMonsters();
             foreach (ClientCard card in monster)
-                if (card.Id == (int)CardId.KrisLaFissure || card.Id == (int)CardId.Kalut || card.Id == (int)CardId.MisralLeTourbillon || card.Id == (int)CardId.Bora || card.Id == (int)CardId.Sirocco || card.Id == (int)CardId.Shura || card.Id == (int)CardId.Blizzard)
+                if (card != null && card.Id == (int)CardId.KrisLaFissure || card.Id == (int)CardId.Kalut || card.Id == (int)CardId.MisralLeTourbillon || card.Id == (int)CardId.Bora || card.Id == (int)CardId.Sirocco || card.Id == (int)CardId.Shura || card.Id == (int)CardId.Blizzard)
                     Count++;
 
             if (Count == 3)

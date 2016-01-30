@@ -136,7 +136,7 @@ namespace WindBot.Game.AI.Decks
         private bool Barbaros()
         {
             foreach (ClientCard card in Duel.Fields[0].SpellZone)
-                if (Card.Id == (int)CardId.AbsorptionCompetence && Card.Position == (int)Game.Enums.CardPosition.FaceUp)
+                if (card != null && Card.Id == (int)CardId.AbsorptionCompetence && Card.Position == (int)Game.Enums.CardPosition.FaceUp)
                     return true;
             return false;
         }
@@ -146,7 +146,7 @@ namespace WindBot.Game.AI.Decks
             if (Duel.Fields[0].HasInHand((int)CardId.DragonPoussiereDetoileCorrompu))
                 return false;
             foreach (ClientCard card in Duel.Fields[0].SpellZone)
-                if (card.Id == (int)CardId.AbsorptionCompetence && card.Position == (int)Game.Enums.CardPosition.FaceUp)
+                if (card != null && card.Id == (int)CardId.AbsorptionCompetence && card.Position == (int)Game.Enums.CardPosition.FaceUp)
                     return true;
             if (IsFieldEmpty())
                 return false;
@@ -158,7 +158,7 @@ namespace WindBot.Game.AI.Decks
             if (Duel.Fields[0].HasInHand((int)CardId.DragonPoussiereDetoileCorrompu))
                 return false;
             foreach (ClientCard card in Duel.Fields[0].SpellZone)
-                if (card.Id == (int)CardId.AbsorptionCompetence && card.Position == (int)Game.Enums.CardPosition.FaceUp)
+                if (card != null && card.Id == (int)CardId.AbsorptionCompetence && card.Position == (int)Game.Enums.CardPosition.FaceUp)
                     return true;
             if (IsFieldEmpty() || Duel.Fields[0].HasInHand((int)CardId.RouageDimensionelCorrompu) && Duel.Fields[0].HasInSpellZone((int)CardId.MondeCorrompu))
                 return false;
@@ -168,7 +168,7 @@ namespace WindBot.Game.AI.Decks
         private bool DragonPoussiereDetoileCorrompu()
         {
             foreach (ClientCard card in Duel.Fields[0].SpellZone)
-                if (card.Id == (int)CardId.AbsorptionCompetence && card.Position == (int)Game.Enums.CardPosition.FaceUp)
+                if (card != null && card.Id == (int)CardId.AbsorptionCompetence && card.Position == (int)Game.Enums.CardPosition.FaceUp)
                     return true;
             if (IsFieldEmpty())
                 return false;
@@ -180,7 +180,7 @@ namespace WindBot.Game.AI.Decks
         private bool RouageDimensionelCorrompu()
         {
             foreach (ClientCard card in Duel.Fields[0].Hand)
-                if (CorrompuCard.Contains(card.Id) && card.Level == 8 && Duel.Fields[0].HasInSpellZone((int)CardId.MondeCorrompu))
+                if (card != null && CorrompuCard.Contains(card.Id) && card.Level == 8 && Duel.Fields[0].HasInSpellZone((int)CardId.MondeCorrompu))
                     return true;
             return false;
         }

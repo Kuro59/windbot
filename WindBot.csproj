@@ -28,7 +28,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>D:\Battle City Alpha\VPN\WindBot\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -62,6 +62,8 @@
     <Compile Include="Game\AI\Decks\OldSchoolExecutor.cs" />
     <Compile Include="Game\AI\Decks\ProtecteursExecutor.cs" />
     <Compile Include="Game\AI\Decks\BlueEyesExecutor.cs" />
+    <Compile Include="Game\AI\Decks\Rank5Executor.cs" />
+    <Compile Include="Game\AI\Decks\ZexalWeaponsExecutor.cs" />
     <Compile Include="Game\AI\DefaultExecutor.cs" />
     <Compile Include="Game\AI\Dialogs.cs" />
     <Compile Include="Game\AI\Enums\DangerousMonster.cs" />

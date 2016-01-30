@@ -82,7 +82,7 @@ namespace WindBot.Game.AI.Decks
         private bool Decret()
         {
             foreach (ClientCard card in Duel.Fields[0].SpellZone)
-                if (card.Id == Card.Id && Card.Position != (int)CardPosition.FaceUp)
+                if (card != null && card.Id == Card.Id && Card.Position != (int)CardPosition.FaceUp)
                     return true;
             return false;
         }
@@ -105,10 +105,10 @@ namespace WindBot.Game.AI.Decks
         {
             int DragonCount = 0;
             foreach (ClientCard card in Duel.Fields[0].Graveyard)
-                if (card.Race == (int)CardRace.Dragon)
+                if (card != null && card.Race == (int)CardRace.Dragon)
                     DragonCount++;
             foreach (ClientCard card in Duel.Fields[0].MonsterZone)
-                if (card.Race == (int)CardRace.Dragon && card.Id != (int)CardId.Dragon5Tetes)
+                if (card != null && card.Race == (int)CardRace.Dragon && card.Id != (int)CardId.Dragon5Tetes)
                     DragonCount++;
 
             if (DragonCount >= 5)  
@@ -126,7 +126,7 @@ namespace WindBot.Game.AI.Decks
             {
                 SelectedCards.Add((int)CardId.KomodoDragon);
                 foreach (ClientCard card in Bot.Hand)
-                    if (card.Id != (int)CardId.BlueEyesDragon && SelectedCards.Count != 2)
+                    if (card != null && card.Id != (int)CardId.BlueEyesDragon && SelectedCards.Count != 2)
                         SelectedCards.Add(card.Id);
                 AI.SelectCard(SelectedCards);
                 return true;
@@ -135,7 +135,7 @@ namespace WindBot.Game.AI.Decks
             {
                 SelectedCards.Add((int)CardId.BlueEyesDragon);
                 foreach (ClientCard card in Bot.Hand)
-                    if (card.Id != (int)CardId.DragonAppat && SelectedCards.Count != 2)
+                    if (card != null && card.Id != (int)CardId.DragonAppat && SelectedCards.Count != 2)
                         SelectedCards.Add(card.Id);
                 AI.SelectCard(SelectedCards);
                 return true;

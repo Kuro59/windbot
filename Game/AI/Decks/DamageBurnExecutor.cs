@@ -84,7 +84,7 @@
         {
             foreach (ClientCard card in Duel.Fields[0].GetMonsters())
             {
-                if (card.Id == (int)CardId.Marshmallon ||
+                if (card != null && card.Id == (int)CardId.Marshmallon ||
                     card.Id == (int)CardId.SpiritReaper ||
                     (card.Id == (int)CardId.NaturiaBeans && Card.Id == (int)CardId.NaturiaBeans))
                 {
@@ -99,7 +99,7 @@
             bool found = false;
             foreach (ClientCard card in Duel.Fields[0].GetMonsters())
             {
-                if (card.Id == (int)CardId.Marshmallon ||
+                if (card != null && card.Id == (int)CardId.Marshmallon ||
                     card.Id == (int)CardId.SpiritReaper)
                     found = true;
             }

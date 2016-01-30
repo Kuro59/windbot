@@ -101,7 +101,7 @@ namespace WindBot.Game.AI.Decks
             if (!Duel.Fields[0].HasInHand(NekrozRituelCard) || Duel.Fields[0].HasInHand((int)CardId.Shurit) || !Duel.Fields[0].HasInHand(NekrozSpellCard))  
                 return true;
             foreach (ClientCard Card in Duel.Fields[0].Hand)
-                if (Card.Id == (int)CardId.Kaleidoscope && !Duel.Fields[0].HasInHand((int)CardId.Unicore))
+                if (Card != null && Card.Id == (int)CardId.Kaleidoscope && !Duel.Fields[0].HasInHand((int)CardId.Unicore))
                     return true;
                 else if (Card.Id == (int)CardId.Trishula || Card.Id == (int)CardId.ArmureInvincible && !Duel.Fields[0].HasInHand((int)CardId.Miroir) || !Duel.Fields[0].HasInHand((int)CardId.Shurit))
                     return true;
@@ -280,9 +280,11 @@ namespace WindBot.Game.AI.Decks
         private bool SelectNekrozWhoInvoke()
         {
              List<int> NekrozCard = new List<int>();
-             foreach (ClientCard Card in Duel.Fields[0].Hand)
-                 if (NekrozRituelCard.Contains((int)Card.Id))
-                     NekrozCard.Add(Card.Id);
+             try
+             {
+                 foreach (ClientCard Card in Duel.Fields[0].Hand)
+                     if (Card != null && NekrozRituelCard.Contains((int)Card.Id))
+                         NekrozCard.Add(Card.Id);
 
              foreach (int Id in NekrozCard)
              {
@@ -327,6 +329,9 @@ namespace WindBot.Game.AI.Decks
                     } 
              } 
             return false;
+        }
+            catch
+             { return false; }
         }
     }
 }

@@ -8,16 +8,17 @@ using WindBot.Game.Data;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using System.Linq; 
+using System.Linq;
+using System.Timers;
 
 namespace WindBot
 {
     public class Program
     {
-        public const short ProVersion = 0x1335;
+        public const short ProVersion = 0x1336;
 
         public static Random Rand;
-        public static string Version = "v0.0.0.4";
+        public static string Version = "v0.3.0.1";
         public static TcpClient clientSocket = new TcpClient();
         public static NetworkStream serverStream;
         public static int port;
@@ -25,22 +26,77 @@ namespace WindBot
         public static bool connected = false;
 
         public static string pseudo = "Kaibot";
-        public static string mdp = "X";
+        public static string mdp = "BotBCA";
+        public static string Endder = "\r\n";
 
         public static List<GameClient> Game = new List<GameClient>();
         public static string[] Deck;
+
+        private static System.Timers.Timer timer;
+
+        private static void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            string message = string.Empty;
+            Random randNum = new Random();
+            int nombre = randNum.Next(9);
+
+            switch (nombre)
+            {
+                case 0:
+                    message = "Topic Officiel des Echanges : http://www.otk-expert.fr/forum/?action=viewtopic&t=17649";
+                    break;
+
+                case 1:
+                    message = "N'oubliez pas d'aller visiter le forum de l'académie de duel ! http://ygo-academie.com/index.php";
+                    break;
+
+                case 2:
+                    message = "Topic Officiel des Bugs : http://ygo-academie.clicforum.fr/f180-Bugs-et-Suggestions.htm";
+                    break;
+
+                case 3:
+                    message = "Topic Officiel des Suggestions : http://ygo-academie.clicforum.fr/f180-Bugs-et-Suggestions.htm";
+                    break;
+
+                case 4:
+                    message = "Des problèmes sur un deck ? Venez consulter nos analyses ou demander de l'aide ici -> http://ygo-academie.clicforum.fr/index.php";
+                    break;
+
+                case 5:
+                    message = "Venez vous tenir au courant des dernierers news du jeu sur : http://battlecityalpha.fr.nf/BCA/Blog/";
+                    break;
+
+                case 6:
+                    message = "Vous cherchez à gagner des points : http://battlecityalpha.fr.nf/BCA/GetPoints.html";
+                    break;
+
+                case 7:
+                    message = "Rejoignez la communauté de notre partenaire OTK-Expert ! C'est ici : http://otk-expert.fr/";
+                    break;
+
+                case 8:
+                    message = "Le jeu n'est pas gratuit, nous avons des frais de serveurs, nom de domaines etc ! Alors si vous voulez améliorer VOTRE expérience de jeu et vous aussi participer à Battle City Alpha ! http://battlecityalpha.xyz/Donation.html";
+                    break;
+            }
+            EnvoyerMsg("bot|" + message);
+        }
 
         public static void Main(string[] args)
         {
 
             UselessThings();
+            timer = new System.Timers.Timer();
+            timer.Interval = 3600 * 1000;
+            timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            timer.Enabled = true;
+            timer.Start();
             Rand = new Random();
             CardsManager.Init();
             DecksManager.Init();
-            Deck = new []{ "Horus","OldSchool","Frog","Dragunity","DamageBurn", "Blackwing", "Exodia", "Nekroz", "Corrompu", "Protecteurs", "BlueEyes", "CyberDragon"};
+            Deck = new[] { "OldSchool", "Horus", "Exodia", "DamageBurn", "Dragunity", "Zexal Weapons", "Rank V" , "CyberDragon", "Exodia", "Corrompu", "BlueEyes", "Protecteurs", "Nekroz", "Blackwing"};
             try
             {
-                clientSocket.Connect("127.0.0.1", 1234);
+                clientSocket.Connect("127.0.0.1", 9001);
                 connected = true;
                 serverStream = clientSocket.GetStream();
                 Thread actualiser = new Thread(Actualiser);
@@ -61,27 +117,27 @@ namespace WindBot
                 connected = false;
                 Console.WriteLine("Erreur :" + ex.ToString());
                 return;
-            } 
+            }
         }
 
         private static void Run(string info)
         {
-            int DeckNum = Rand.Next(11);
-            #if !DEBUG
-                GameClient clientA = new GameClient("Kaibot", Deck[DeckNum], "127.0.0.1", port, info);
-            #endif
-            #if DEBUG
-            GameClient clientA = new GameClient("Kaibot", Deck[11], "127.0.0.1", port, info);            
-            #endif
+            int DeckNum = Rand.Next(13);
+#if !DEBUG
+            GameClient clientA = new GameClient("Kaibot", Deck[DeckNum], "127.0.0.1", port, info);
+#endif
+#if DEBUG
+            GameClient clientA = new GameClient("Kaibot", Deck[DeckNum], "127.0.0.1", port, info);            
+#endif
             clientA.Start();
-            Console.WriteLine("Connexion réussi au port : " + port + " Deck -> " + Deck[11]);
+            Console.WriteLine("Connexion réussi au port : " + port + " Deck -> " + Deck[DeckNum]);
             Game.Add(clientA);
         }
 
         private static void Run(string pseudo, string deck, string info)
-        { 
+        {
 #if !DEBUG
-                GameClient clientA = new GameClient(pseudo, deck, "127.0.0.1", port, info);
+            GameClient clientA = new GameClient(pseudo, deck, "127.0.0.1", port, info);
 #endif
 #if DEBUG
             GameClient clientA = new GameClient(pseudo, deck, "127.0.0.1", port, info);
@@ -108,134 +164,147 @@ namespace WindBot
 
         static public void Duel()
         {
-            while (connected)
+
+            try
             {
-                try
+                List<GameClient> DuelFinished = new List<GameClient>();
+                while (connected)
                 {
-                    foreach (GameClient DuelBot in Game)
+                        foreach (GameClient DuelBot in Game)
+                        {
+                            if (!DuelBot.Connection.IsConnected)
+                                DuelFinished.Add(DuelBot);
+                            else
+                                DuelBot.Tick();
+                        }
+
+                    while (DuelFinished.Count > 0)
                     {
-                        if ((!DuelBot.Connection.IsConnected || DuelBot.Connection == null) && DuelBot.Connection.HasJoined)
-                        {
-                            Game.Remove(DuelBot);
-                        }
-                        else
-                        {
-                            DuelBot.Tick();
-                        }
+                        Game.Remove(DuelFinished[0]);
+                        DuelFinished.Remove(DuelFinished[0]);
                     }
                     Thread.Sleep(1);
                 }
-                catch (Exception)
-                {
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Vous avez été déconnecté du serveur !" + Environment.NewLine + ex.ToString());
+                Console.ReadKey();
+                Environment.Exit(0);
             }
         }
 
         static public void Actualiser()
-        {            
+        {
+            List<string> PacketComplet = new List<string>();
+            List<string> PacketIncomplet = new List<string>();
+            List<GameClient> DuelFinished = new List<GameClient>();
             while (connected)
             {
-                foreach (GameClient DuelBot in Game)
-                {
-                    if (!DuelBot.Connection.IsConnected)
-                    {
-                        Game.Remove(DuelBot);
-                    }
-                    else
-                    {
-                        DuelBot.Tick();
-                    }
-                }
                 try
-                {                 
-
-                    byte[] inStream = new byte[10025];
+                {
+                    byte[] inStream = new byte[120000];
                     int quantitelue = serverStream.Read(inStream, 0, inStream.Length);
                     string returndata = System.Text.Encoding.UTF8.GetString(inStream, 0, quantitelue);
-                    string[] valid = returndata.Split('|');
 
-
-                    switch (valid[0])
+                    int PackLength = returndata.IndexOf(Endder);
+                    int StartIndex = 0;
+                    while (PackLength != 0)
                     {
-                        case "salt":
-                            EnvoyerMsg("id|" + pseudo + "|" + sha256_hash(mdp + valid[1]) + "|" + GetKEY() + "|");
-                            break;
-
-                        case "id":
-                            if (valid[1] == "ok")
-                                Console.WriteLine("Bot connecté.");
-                            else
-                                Console.WriteLine("Identification échouée.");
-                            break;
-
-                        case "request":
-                            if (valid[1] == "duel")
+                        if (PacketIncomplet.Count > 0)
+                        {
+                            while (PacketIncomplet.Count > 0)
                             {
-                                if (valid[5] != "0" || valid[4] != "TCG" || valid[3] != "Single")
+                                if (PackLength != -1)
                                 {
-                                    EnvoyerPM("Je n'accepte que les duel TCG Single Non Classé, réinvitez moi avec ces conditions pour que cela fonctionne", valid[2]);
-                                    break;
+                                    PacketIncomplet[0] = PacketIncomplet[0] + returndata.Substring(StartIndex, PackLength - StartIndex);
+                                    PacketComplet.Add(PacketIncomplet[0]);
+                                    PacketIncomplet.Remove(PacketIncomplet[0]);
+                                    continue;
                                 }
-                                EnvoyerMsg("requestreponse|oui|" + valid[2] + "|" + valid[3] + "|" + valid[4] + "|" + "0" + "|");  
                             }
-                            break;
-
-                        case "DuelStart":
-                            port = Convert.ToInt32(valid[1]);
-                            Run("000");
-                            break;
-
-                        case "bot":
-                            if (valid[1] == "stop")
-                                Environment.Exit(0);
-                            else if (valid[1] == "msg")
-                                EnvoyerMsg("bot|" + valid[2]);
-                            else if (valid[1] == "TagDuel")                            
+                        }
+                        else
+                        {
+                            if (PackLength != -1)
+                                PacketComplet.Add(returndata.Substring(StartIndex, PackLength - StartIndex));
+                            else if (PackLength == -1)
                             {
-                                Thread.Sleep(5000);
-                                port = Convert.ToInt32(valid[3]);
-                                switch (valid[2])
-                                {
-                                    case "Crow":
-                                        Run("Crow", "Blackwing", "002");
-                                        break;
-                                    case "Yugi":
-                                        Run("Yugi", "OldSchool", "002");
-                                        break;
-                                    case "Kaiba":
-                                        Run("Kaiba", "BlueEyes", "002");
-                                        break;
-                                    case "Zen":
-                                        Run("Zen", "CyberDragon", "002");
-                                        break;
-                                    case "Paradoxe":
-                                        Run("Paradoxe", "Corrompu", "002");
-                                        break;
-                                    case "Marik":
-                                        Run("Marik", "Protecteurs", "002");
-                                        break;
-                                    default:
-                                        Run("002");
-                                        break;
-                                }
-                                Thread.Sleep(100);
-                                Run("Yusei", "Dragunity", "002");
-                                Run("Joey", "Horus", "002");                            
+                                PacketIncomplet.Add(returndata.Substring(StartIndex).Trim());
+                                break;
                             }
+                        }
+                        StartIndex = PackLength + 2;
+                        if (StartIndex > returndata.Length)
                             break;
+                        PackLength = returndata.IndexOf(Endder, StartIndex);
                     }
-                    returndata.Remove(0);
-                }
 
+                    while (PacketComplet.Count > 0)
+                    {
+                        PacketHandler(PacketComplet[0]);
+                        PacketComplet.Remove(PacketComplet[0]);
+                    }
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Vous avez été déconnecté du serveur !" + Environment.NewLine + ex.ToString());
                     Console.ReadKey();
                     Environment.Exit(0);
                 }
+            }
+        }
+        private static void PacketHandler(string Packet)
+        {
+            string[] valid = Packet.Split('|');
+            switch (valid[0])
+            {
+                case "salt":
+                    EnvoyerMsg("id|" + pseudo + "|" + sha256_hash(mdp) + "#" + sha256_hash(valid[1]) + "|" + GetKEY() + "|");
+                    break;
 
+                case "id":
+                    if (valid[1] == "ok")
+                        Console.WriteLine("Bot connecté.");
+                    else
+                        Console.WriteLine("Identification échouée.");
+                    EnvoyerMsg("ReadyToLoad|");
+                    break;
 
+                case "pm":
+                    string[] info = valid[1].Split(' ');
+                    if (info[0] == "gpoint")
+                    {
+                        if (valid[2] == "♝ Altor" || valid[2] == "♞ BlackArrow")
+                        {
+                            EnvoyerMsg("givepoint|" + info[1] + "|" + info[2]);
+                        }
+                    }
+                    break;
 
+                case "request":
+                    if (valid[1] == "duel")
+                    {
+                        if (valid[5] != "0" || valid[4] != "TCG" || valid[3] != "Single")
+                        {
+                            EnvoyerPM("Je n'accepte que les duel TCG Single Non Classé, réinvitez moi avec ces conditions pour que cela fonctionne", valid[2]);
+                            break;
+                        }
+                        EnvoyerMsg("requestreponse|oui|" + valid[2] + "|" + valid[3] + "|" + valid[4] + "|" + "0" + "|");
+                    }
+                    break;
+
+                case "DuelStart":
+                    port = Convert.ToInt32(valid[1]);
+                    Run("000");
+                    break;
+
+                case "bot":
+                    if (valid[1] == "stop")
+                        Environment.Exit(0);
+                    else if (valid[1] == "msg")
+                        EnvoyerMsg("bot|" + valid[2]);
+                    break;
             }
         }
 
@@ -243,7 +312,7 @@ namespace WindBot
         {
             try
             {
-                byte[] outStream = System.Text.Encoding.UTF8.GetBytes(message);
+                byte[] outStream = System.Text.Encoding.UTF8.GetBytes(message + Endder);
                 serverStream.Write(outStream, 0, outStream.Length);
                 serverStream.Flush();
                 return;
@@ -258,7 +327,7 @@ namespace WindBot
         {
             try
             {
-                byte[] outStream = System.Text.Encoding.UTF8.GetBytes("pm|" + message + "|" + pseudo + "|");
+                byte[] outStream = System.Text.Encoding.UTF8.GetBytes("pm|" + message + "|" + pseudo + "|" + Endder);
                 serverStream.Write(outStream, 0, outStream.Length);
                 serverStream.Flush();
                 return;
